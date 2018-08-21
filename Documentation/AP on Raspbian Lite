@@ -1,0 +1,4 @@
+* Download Raspbian Stretch - https://www.raspberrypi.org/downloads/raspbian/ and unzip
+* Create bootable flash card using Win32DiskImager
+* Carefully follow next instruction to make Raspberry being Access point - https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
+  Note! run "iptables-restore < /etc/iptables.ipv4.nat" with sudo !
