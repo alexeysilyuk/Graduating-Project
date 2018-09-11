@@ -7,6 +7,7 @@ timeoutTime=60				#run check if 60 seconds to detect DOS attack
 packetsAmount=50			#amount of packet to be sure in DOS attack
 
 
+touch $blocked_ips
 #run forever loop
 while : ;
 do
