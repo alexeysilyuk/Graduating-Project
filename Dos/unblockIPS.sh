@@ -29,11 +29,11 @@ for i in $(cat $blocked_list); do
 	#check if pass 10 minutes after ip been blocked
 	if [ $current_timestamp -gt $new_timestamp ]; then
 		#remove it from iptables
-		echo "Remove $ip from iptables block" >> $logFile
+		echo "$(date +%D" "%H:%M:%S): Remove $ip from iptables block" >> $logFile
 		sudo iptables -D INPUT -s $ip -j DROP 2>> /dev/null
 	else
 		#if not, write this entry to updated_list, that been checked in next iteration
-		echo "$ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
+		echo "$(date +%D" "%H:%M:%S): $ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
 		echo $i >> $updated_list
 	fi;
 done
