@@ -28,16 +28,19 @@ do
 		sudo iptables -C INPUT -s $attacker_ip -j DROP 2>> /dev/null
 		ip_already_blocked=$?
 
+		host_name=$(host $attacker_ip | awk '{print $5}' | awk -F '.' '{print $1}')
+
 		#if not in iptables rules to be DROPen, add rule nd write log
 		if [ $ip_already_blocked -eq 1 ];then
 			sudo iptables -A INPUT -s $attacker_ip -j DROP
-			echo "$(date +%D" "%H:%M:%S) : New attack from [ $attacker_ip ], create new DROP rule in iptables" >> $logFile
+
+			echo "$(date +%D" "%H:%M:%S) : New attack from [ $host_name, $attacker_ip ], create new DROP rule in iptables" >> $logFile
 			
 			#add ip to files with blocked ip's for futer unblocking
 			echo "$(date +%s):$attacker_ip " >> $blocked_ips
 		else
 			#if ip already blocked, just write to log
-			echo "$(date +%D" "%H:%M:%S) : Dos attack from [ $attacker_ip ] " >> $logFile
+			echo "$(date +%D" "%H:%M:%S) : Dos attack from [ $host_name, $attacker_ip ] " >> $logFile
 		fi;
 		
 	fi;

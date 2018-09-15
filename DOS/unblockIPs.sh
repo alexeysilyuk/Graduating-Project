@@ -3,6 +3,10 @@ blocked_list="blocked.txt"
 updated_list="updated_blocks.txt"
 logFile="autoremove_log.txt"
 
+if [ -f $logFile ]; then
+	rm $logFile
+fi;
+
 while : ; do
 
  if [ -f $updated_list ]; then
