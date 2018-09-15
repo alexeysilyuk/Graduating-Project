@@ -33,5 +33,5 @@ if [ -f $updated_list ]; then
 	mv $updated_list $blocked_list
 fi;
 
-sleep 30
+sleep 90
 done;
