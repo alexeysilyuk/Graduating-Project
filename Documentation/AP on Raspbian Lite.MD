@@ -2,7 +2,7 @@
 
 :two: Create bootable flash card using [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
 
-:three: Set static IP for device for using via SSH as described [Here](https://www.linode.com/docs/networking/linux-static-ip-configuration/)
+:three: Set static IP for device for using via SSH as described [Here](https://raspberrypi.stackexchange.com/questions/37920/how-do-i-set-up-networking-wifi-static-ip-address) ( i used "Network Interfaces method" )
 
 :four: Carefully follow [this instruction](https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md) to make Raspberry being Access point
 
