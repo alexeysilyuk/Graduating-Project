@@ -1,4 +1,4 @@
-:one: Download [Raspbian Stretch](https://www.raspberrypi.org/downloads/raspbian/ and unzip)
+:one: Download [Raspbian Stretch](https://www.raspberrypi.org/downloads/raspbian/) and unzip
 
 :two: Create bootable flash card using [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
 
