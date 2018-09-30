@@ -1,54 +1,47 @@
-#!/bin/bash
+#!/bin/bash -e
 
-db="tcpdump"
-max_records=20
-oldestID_rowID=9999
-interface=ens33
-
-
-add_record () {
-	ids=$(sqlite3 statistics.db "select count(id) from tcpdump")
-	if [ $ids -ge $max_records ] ; then
-		add_index=$(sqlite3 statistics.db "select ratio from tcpdump where id=$oldestID_rowID")
-
-		if [ ${add_index%.*} -gt $max_records ]; then
-			add_index=1
-		fi;
-
-
-		echo "update value $1 to db with id ${add_index%.*}"
-		sqlite3 statistics.db "update tcpdump set ratio = $1 where id=${add_index%.*}"
-		sqlite3 statistics.db "update tcpdump set ratio = $((${add_index%.*}+1)) where id=$oldestID_rowID"
-	else
-		max_record=$(sqlite3 statistics.db "select max(id) from tcpdump where id!= $oldestID_rowID")
-		sqlite3 statistics.db "insert into tcpdump values ($(($max_record+1)),$1)"
-	fi; 
-}
-
-${add_index%.*}
-
-timeout 90 tcpdump -i ens33 "tcp[tcpflags] & (tcp-syn) != 0" > syn.txt &
-timeout 90 tcpdump -i ens33 "tcp[tcpflags] & (tcp-fin) != 0" > fin.txt &
-sleep 91
-
-syns=$(cat syn.txt | wc -l)
-fins=$(cat fin.txt | wc -l)
-ratio=$(awk "BEGIN {print $syns/$fins; exit}")
-
-echo "$syns syns"
-echo "$fins fins"
-echo "raion is $ratio"
-
-add_record $ratio
-
-
+#import functions and definitions
+source functions.sh
 
 #while :; do
 
 
+# listen to packets and collect data
+timeout $runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-syn) != 0" > $synfile & # count SYN packets
+timeout $runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-fin) != 0" > $finfile & # count FIN packets
+sleep $runtime
+
+#count lines for producing ratio of SYN/FIN packets
+syns=$(cat $synfile | wc -l)
+fins=$(cat $finfile | wc -l)
+echo "SYNS $syns, FINS $fins"
+
+#calculate ratio
+ratio=$(awk "BEGIN {print $syns/$fins; exit}")
+echo "RATIO: $ratio"
+
+#get current ratio from database
+avg_ratio=$(sqlite3 $database_name "select avg(ratio) from $tablename where id!=$oldestID_rowID")
+
+#calculate current average from db * dos_attack_margin to get maximal offset from real average
+#all values over thos 
+max_allowed_ratio=$(awk "BEGIN {print $avg_ratio * $allowed_margin; exit}")
+echo "Maximal available ratio: $max_allowed_ratio"
 
 
+#compare real ratio with maximal allowed
+if (( $(echo "$ratio > $max_allowed_ratio" |bc -l) )) ;then
+	# potential DOS attack detected
+	echo "$ratio greter than $max_allowed_ratio"
+	echo "potential intruder!"
+	#create list of ip's for future detecting intruders
+	convert_ip_lists
 
+else	
+	# no DOS attack detected, add current ratio to DB
+	echo "adding $ratio to DB"
+	add_record $ratio
+fi;
 
+#done;
 
-#done
