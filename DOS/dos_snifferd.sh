@@ -4,7 +4,7 @@
 source functions.sh
 dos_detetction_runtime=40
 
-
+mkdir "sniffer_files"
 
 
 while :; do
