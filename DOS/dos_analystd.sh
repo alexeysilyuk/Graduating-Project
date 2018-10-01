@@ -16,6 +16,14 @@ while :; do
 	syns=$(cat $synfile | wc -l)
 	fins=$(cat $finfile | wc -l)
 
+	if [ $syns -eq "0"]; then
+		syns=1
+		fi;
+	if [ $fins -eq "0"]; then
+		fins=1
+		fi;
+
+
 	#calculate ratio
 	ratio=$(awk "BEGIN {print $syns/$fins; exit}")
 
