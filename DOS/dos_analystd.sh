@@ -8,8 +8,8 @@ sleep_time=300
 
 while :; do
 	# listen to packets and collect data
-	timeout $statistic_analyzer_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-syn) != 0" > $synfile & # count SYN packets
-	timeout $statistic_analyzer_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-fin) != 0" > $finfile & # count FIN packets
+	timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-syn) != 0" > $synfile & # count SYN packets
+	timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-fin) != 0" > $finfile & # count FIN packets
 	sleep $statistic_analyzer_runtime
 
 	#count lines for producing ratio of SYN/FIN packets

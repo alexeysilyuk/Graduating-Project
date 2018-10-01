@@ -9,8 +9,8 @@ mkdir "sniffer_files"
 
 while :; do
 	# listen to packets and collect data
-	sudo timeout $dos_detetction_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-syn) != 0" > $syn_file & # count SYN packets
-	sudo timeout $dos_detetction_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-fin) != 0" > $fin_file & # count FIN packets
+	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-syn) != 0" > $syn_file & # count SYN packets
+	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-fin) != 0" > $fin_file & # count FIN packets
 	sleep $dos_detetction_runtime
 
 	#count lines for producing ratio of SYN/FIN packets
