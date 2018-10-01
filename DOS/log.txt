@@ -1,0 +1,1 @@
+dos_snifferd.sh: Maximal available ratio: 10

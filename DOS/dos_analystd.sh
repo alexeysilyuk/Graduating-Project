@@ -8,18 +8,18 @@ sleep_time=300
 
 while :; do
 	# listen to packets and collect data
-	timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-syn) != 0" > $synfile & # count SYN packets
-	timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-fin) != 0" > $finfile & # count FIN packets
+	sudo timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-syn) != 0" > $synfile & # count SYN packets
+	sudo timeout $statistic_analyzer_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-fin) != 0" > $finfile & # count FIN packets
 	sleep $statistic_analyzer_runtime
 
 	#count lines for producing ratio of SYN/FIN packets
 	syns=$(cat $synfile | wc -l)
 	fins=$(cat $finfile | wc -l)
 
-	if [ $syns -eq "0"]; then
+	if [ $syns -eq "0" ]; then
 		syns=1
 		fi;
-	if [ $fins -eq "0"]; then
+	if [ $fins -eq "0" ]; then
 		fins=1
 		fi;
 
@@ -37,6 +37,7 @@ while :; do
 	#compare real ratio with maximal allowed
 	if (( $(echo "$ratio < $max_allowed_ratio" |bc -l) )) ;then
 		# no DOS attack detected, add current ratio to DB
+		echo "add ratio $ratio"
 		add_record $ratio
 	fi;
 
