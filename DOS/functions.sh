@@ -20,19 +20,13 @@ add_record () {
 
 		sqlite3 $database_name "update $tablename set ratio = $1 where id=${add_index%.*}"
 		sqlite3 $database_name "update $tablename set ratio = $((${add_index%.*}+1)) where id=$oldestID_rowID"
-<<<<<<< HEAD
-        echo "$($get_time): add_record(): Add value $1 value to $database_name" > $analystLogFile
+
+        echo "$($get_time): add_record(): Add value $1 value to $database_name" >> $analystLogFile
 	else
 		max_record=$(sqlite3 $database_name "select max(id) from $tablename where id!= $oldestID_rowID")
 		sqlite3 $database_name "insert into $tablename values ($(($max_record+1)),$1)"
-        echo "$($get_time): add_record(): Add value $1 value to $database_name" > $analystLogFile
-=======
-        echo "$(date +%D" "%H:%M:%S): add_record(): Add value $1 value to $database_name" >> $analystLogFile
-	else
-		max_record=$(sqlite3 $database_name "select max(id) from $tablename where id!= $oldestID_rowID")
-		sqlite3 $database_name "insert into $tablename values ($(($max_record+1)),$1)"
-        echo "$(date +%D" "%H:%M:%S): add_record(): Add value $1 value to $database_name" >> $analystLogFile
->>>>>>> 2a96ad2e59af09589e8e72b88ae6817b3184e0bd
+        echo "$($get_time): add_record(): Add value $1 value to $database_name" >> $analystLogFile
+
 	fi; 
 }
 
