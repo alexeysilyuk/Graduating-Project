@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 #import functions and definitions
 source functions.sh
@@ -15,11 +15,9 @@ while :; do
 	#count lines for producing ratio of SYN/FIN packets
 	syns=$(cat $synfile | wc -l)
 	fins=$(cat $finfile | wc -l)
-	echo "SYNS $syns, FINS $fins"
 
 	#calculate ratio
 	ratio=$(awk "BEGIN {print $syns/$fins; exit}")
-	echo "RATIO: $ratio"
 
 	#get current ratio from database
 	avg_ratio=$(sqlite3 $database_name "select avg(ratio) from $tablename where id!=$oldestID_rowID")
@@ -27,8 +25,6 @@ while :; do
 	#calculate current average from db * dos_attack_margin to get maximal offset from real average
 	#all values over thos 
 	max_allowed_ratio=$(awk "BEGIN {print $avg_ratio * $allowed_margin; exit}")
-	echo "Maximal available ratio: $max_allowed_ratio"
-
 
 	#compare real ratio with maximal allowed
 	if (( $(echo "$ratio < $max_allowed_ratio" |bc -l) )) ;then

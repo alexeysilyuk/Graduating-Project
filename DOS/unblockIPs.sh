@@ -1,7 +1,8 @@
 #!/bin/bash
 blocked_list="blocked.txt"
 updated_list="updated_blocks.txt"
-logFile="autoremove_log.txt"
+logFile="log.txt"
+unblockIPs_sleep_time=90
 
 if [ -f $logFile ]; then
 	rm $logFile
@@ -14,10 +15,10 @@ while : ; do
      fi;
 
 touch $updated_list
- if [ ! -f $blocked_list ]   ;then
-     echo "There are no blocked ip's list" >> $logFile
-     exit 1
-     fi;
+ while [ ! -f $blocked_list ]   ;do
+     echo "UnblockIP.sh: There are no blocked ip's list" >> $logFile
+     sleep $unblockIPs_sleep_time
+     done;
 for i in $(cat $blocked_list); do
 	ip="${i#*:}"
 	time_stamp="${i%:*}"
@@ -25,10 +26,10 @@ for i in $(cat $blocked_list); do
 	current_timestamp=$(date  +%s)
 
 	if [ $current_timestamp -gt $new_timestamp ]; then
-		echo "Remove $ip from iptables block" >> $logFile
+		echo "(date +%D" "%H:%M:%S): UnblockIP.sh: Remove $ip from iptables block" >> $logFile
 		sudo ipset del blacklist $ip
 	else
-		echo "$ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
+		echo "(date +%D" "%H:%M:%S): UnblockIP.sh: $ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
 		echo $i >> $updated_list
 	fi;
 done
@@ -37,5 +38,5 @@ if [ -f $updated_list ]; then
 	mv $updated_list $blocked_list
 fi;
 
-sleep 90
+sleep $unblockIPs_sleep_time
 done;
