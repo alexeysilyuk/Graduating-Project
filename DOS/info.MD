@@ -10,12 +10,12 @@ must install before using :
   
   and create rules list:
   
-  <addr>ipset create blacklist hash:ip hashsize 4096
+  >ipset create blacklist hash:ip hashsize 4096
   
   * Set up iptables rules. Match with blacklist and drop traffic
-<addr>iptables -I INPUT -m set --match-set blacklist src -j DROP
+>iptables -I INPUT -m set --match-set blacklist src -j DROP
 
-<addr>iptables -I FORWARD -m set --match-set blacklist src -j DROP
+>iptables -I FORWARD -m set --match-set blacklist src -j DROP
 
 based on [this](https://linux-audit.com/blocking-ip-addresses-in-linux-with-iptables/) tutorial
 
