@@ -9,6 +9,7 @@ must install before using :
  ` sudo apt-get install ipset`
   
   * Create black list 
+  
   `sudo ipset create blacklist hash:ip hashsize 4096`
   
   * Set up iptables rules. Match with blacklist and drop traffic
