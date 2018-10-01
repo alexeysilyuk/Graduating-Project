@@ -2,19 +2,22 @@ Based on [this](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.218.500
 
 must install before using :
 
-  sudo apt-get install tcpdump
+  `sudo apt-get install tcpdump`
   
-  sudo apt-get install sqlite3
+ ` sudo apt-get install sqlite3`
   
-  apt-get install ipset
+ ` sudo apt-get install ipset`
   
-  and create rules list:
+  * Create black list 
   
-  ipset create blacklist hash:ip hashsize 4096
+  `sudo ipset create blacklist hash:ip hashsize 4096`
   
-  # Set up iptables rules. Match with blacklist and drop traffic
-iptables -I INPUT -m set --match-set blacklist src -j DROP
-iptables -I FORWARD -m set --match-set blacklist src -j DROP
+  * Set up iptables rules. Match with blacklist and drop traffic
+  
+ 
+`sudo iptables -I INPUT -m set --match-set blacklist src -j DROP`
+
+`sudo iptables -I FORWARD -m set --match-set blacklist src -j DROP`
 
 based on [this](https://linux-audit.com/blocking-ip-addresses-in-linux-with-iptables/) tutorial
 
