@@ -26,7 +26,7 @@ for i in $(cat $blocked_list); do
 
 	if [ $current_timestamp -gt $new_timestamp ]; then
 		echo "Remove $ip from iptables block" >> $logFile
-		sudo iptables -D INPUT -s $ip -j DROP 2>> /dev/null
+		sudo ipset del blacklist $ip
 	else
 		echo "$ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
 		echo $i >> $updated_list

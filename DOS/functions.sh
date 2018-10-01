@@ -31,36 +31,25 @@ detect_intruder_ip(){
 
 echo "detected intruder ip:"
 
-intruder_ip=$(cat $syn_ips | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2 }')
-echo $intruder_ip
+intruder_ip=$(cat $syn_ips | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2 }' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' | sort -u)
 last_intruder_ip=$intruder_ip
-
+echo $last_intruder_ip
 }
 
 
 
 block_ip(){
-    echo "trying to block $1"
-    #check if this ip already in block list
-    sudo iptables -C INPUT -s $1 -j DROP #2>> /dev/null
-    ip_already_blocked=$?
-    echo " ip already blocked : $ip_already_blocked"
-
-    host_name=$(host $1 | awk '{print $5}' | awk -F '.' '{print $1}')
-    echo "hostname : $host_name"
-
-    #if not in iptables rules to be DROPen, add rule nd write log
-    if [ $ip_already_blocked -eq 1 ];then
-        echo "inside if"
-        sudo iptables -A INPUT -s $1 -j DROP
-
-        echo "$(date +%D" "%H:%M:%S) : New attack from [ $host_name, $1 ], create new DROP rule in iptables" >> $logFile
-        
+    sudo ipset add blacklist $last_intruder_ip
+    is_blocked=$?
+    host_name=$(host $last_intruder_ip | awk '{print $5}' | awk -F '.' '{print $1}')
+    #if ip been blocked now, add it to blocked.txt file, if not, means it's already in blocked list
+    #therefore just write log
+    if [ $is_blocked -eq 0 ];then
+        echo "$(date +%D" "%H:%M:%S) : New attack from [ $host_name, $last_intruder_ip ], create new DROP rule in iptables" >> $logFile   
         #add ip to files with blocked ip's for futer unblocking
-        echo "$(date +%s):$1 " >> $blocked_ips
+        echo "$(date +%s):$last_intruder_ip " >> $blocked_ips
     else
-        echo "inside else"
         #if ip already blocked, just write to log
-        echo "$(date +%D" "%H:%M:%S) : Dos attack from [ $host_name, $1 ] " >> $logFile
+        echo "$(date +%D" "%H:%M:%S) : Dos attack from [ $host_name, $last_intruder_ip ] " >> $logFile
     fi;
 }

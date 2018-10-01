@@ -17,10 +17,10 @@ dos_detetction_runtime=40
 	syns=$(cat $syn_file | wc -l)
 	fins=$(cat $fin_file | wc -l)
 	echo "SYNS $syns, FINS $fins"
-    if [ $syns -eq "0"]; then 
+    if [ $syns -eq "0" ]; then 
         syns=1 
     fi;
-    if [ $fins -eq "0"]; then 
+    if [ $fins -eq "0" ]; then 
         fins=1 
     fi;
 
