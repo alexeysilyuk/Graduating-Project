@@ -8,14 +8,15 @@ must install before using :
   
  ` sudo apt-get install ipset`
   
-  and create rules list:
-  
-  >ipset create blacklist hash:ip hashsize 4096
+  * Create black list 
+  `sudo ipset create blacklist hash:ip hashsize 4096`
   
   * Set up iptables rules. Match with blacklist and drop traffic
->iptables -I INPUT -m set --match-set blacklist src -j DROP
+  
+ 
+`sudo iptables -I INPUT -m set --match-set blacklist src -j DROP`
 
->iptables -I FORWARD -m set --match-set blacklist src -j DROP
+`sudo iptables -I FORWARD -m set --match-set blacklist src -j DROP`
 
 based on [this](https://linux-audit.com/blocking-ip-addresses-in-linux-with-iptables/) tutorial
 
