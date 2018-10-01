@@ -6,7 +6,7 @@ must install before using :
   
   sudo apt-get install sqlite3
   
-  sudo apt-get install ipset'
+  sudo apt-get install ipset`
   
   and create rules list:
   
