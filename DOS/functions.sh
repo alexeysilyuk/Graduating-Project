@@ -20,11 +20,11 @@ add_record () {
 
 		sqlite3 $database_name "update $tablename set ratio = $1 where id=${add_index%.*}"
 		sqlite3 $database_name "update $tablename set ratio = $((${add_index%.*}+1)) where id=$oldestID_rowID"
-        echo "$(date +%D" "%H:%M:%S): add_record(): Add value $1 value to $database_name" > $analystLogFile
+        echo "$($get_time): add_record(): Add value $1 value to $database_name" > $analystLogFile
 	else
 		max_record=$(sqlite3 $database_name "select max(id) from $tablename where id!= $oldestID_rowID")
 		sqlite3 $database_name "insert into $tablename values ($(($max_record+1)),$1)"
-        echo "$(date +%D" "%H:%M:%S): add_record(): Add value $1 value to $database_name" > $analystLogFile
+        echo "$($get_time): add_record(): Add value $1 value to $database_name" > $analystLogFile
 	fi; 
 }
 
@@ -45,11 +45,11 @@ block_ip(){
     #if ip been blocked now, add it to blocked.txt file, if not, means it's already in blocked list
     #therefore just write log
     if [ $is_blocked -eq 0 ];then
-        echo "$(date +%D" "%H:%M:%S): block_ip(): New attack from [ $host_name, $last_intruder_ip ], create new DROP rule in iptables" >> $logFile   
+        echo "$($get_time): block_ip(): New attack from [ $host_name, $last_intruder_ip ], create new DROP rule in iptables" >> $logFile   
         #add ip to files with blocked ip's for futer unblocking
-        echo "$(date +%D" "%H:%M:%S):$last_intruder_ip " >> $blocked_ips
+        echo "$($get_time):$last_intruder_ip " >> $blocked_ips
     else
         #if ip already blocked, just write to log
-        echo "$(date +%D" "%H:%M:%S): block_ip(): Dos attack from [ $host_name, $last_intruder_ip ] " >> $logFile
+        echo "$($get_time): block_ip(): Dos attack from [ $host_name, $last_intruder_ip ] " >> $logFile
     fi;
 }

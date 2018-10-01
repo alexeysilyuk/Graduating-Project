@@ -26,10 +26,10 @@ for i in $(cat $blocked_list); do
 	current_timestamp=$(date  +%s)
 
 	if [ $current_timestamp -gt $new_timestamp ]; then
-		echo "(date +%D" "%H:%M:%S): UnblockIP.sh: Remove $ip from iptables block" >> $logFile
+		echo "$($get_time): UnblockIP.sh: Remove $ip from iptables block" >> $logFile
 		sudo ipset del blacklist $ip
 	else
-		echo "(date +%D" "%H:%M:%S): UnblockIP.sh: $ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
+		echo "$($get_time): UnblockIP.sh: $ip block will expire in $((600- $(($current_timestamp-$time_stamp)))) seconds" >> $logFile
 		echo $i >> $updated_list
 	fi;
 done
