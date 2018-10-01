@@ -7,7 +7,7 @@ dos_detetction_runtime=40
 
 
 
-#while :; do
+while :; do
 	# listen to packets and collect data
 	sudo timeout $dos_detetction_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-syn) != 0" > $syn_file & # count SYN packets
 	sudo timeout $dos_detetction_runtime tcpdump -nnq -i ens33  "tcp[tcpflags] & (tcp-fin) != 0" > $fin_file & # count FIN packets
@@ -51,12 +51,4 @@ dos_detetction_runtime=40
                     echo "OK"
 	fi;
 
-#done;
-
-
-
-	# potential DOS attack detected
-	#echo "$ratio greter than $max_allowed_ratio"
-	#echo "potential intruder!"
-	#create list of ip's for future detecting intruders
-	#convert_ip_lists
+done;
