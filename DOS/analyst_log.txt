@@ -1,1 +1,12 @@
-10/01/18 13:33:46: add_record(): Add value 1 value to statistics.db
+16/03/19-19:30:46: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:10:47: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:16:07: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:21:27: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:26:47: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:32:07: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-17:40:16: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-18:00:46: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+17/03/19-19:20:25: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+23/03/19-11:34:15: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+23/03/19-11:39:35: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db
+1553348746|23/03/19|13:45:46: add_record(): Add value 1 value to /home/pi/safewifi/DOS/statistics.db

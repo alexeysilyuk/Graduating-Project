@@ -1,0 +1,3 @@
+Subject: EvilTwin attack detected
+ 
+intruder mac is: 32:07:4D:83:98:1A

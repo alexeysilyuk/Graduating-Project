@@ -1,8 +1,6 @@
 #!/bin/bash
-blocked_list="blocked.txt"
-updated_list="updated_blocks.txt"
-logFile="log.txt"
-unblockIPs_sleep_time=90
+
+source $CONF_WD/"dos.conf"
 
 if [ -f $logFile ]; then
 	rm $logFile
@@ -20,8 +18,8 @@ touch $updated_list
      sleep $unblockIPs_sleep_time
      done;
 for i in $(cat $blocked_list); do
-	ip="${i#*:}"
-	time_stamp="${i%:*}"
+	ip="${i##*|}"
+	time_stamp="${i%%|*}"
 	new_timestamp=$(($time_stamp + 600))
 	current_timestamp=$(date  +%s)
 

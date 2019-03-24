@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-source defs.conf
+source $CONF_WD/"dos.conf"
 
 # convert tcpump log to 2 lists of ip's, ip's of SYN senders and ip's of FIN receiver
 convert_ip_lists(){
@@ -49,7 +49,7 @@ block_ip(){
     if [ $is_blocked -eq 0 ];then
         echo "$($get_time): block_ip(): New attack from [ $host_name, $last_intruder_ip ], create new DROP rule in iptables" >> $logFile   
         #add ip to files with blocked ip's for futer unblocking
-        echo "$($get_time):$last_intruder_ip " >> $blocked_ips
+        echo "$($get_time)|$last_intruder_ip " >> $blocked_ips
     else
         #if ip already blocked, just write to log
         echo "$($get_time): block_ip(): Dos attack from [ $host_name, $last_intruder_ip ] " >> $logFile

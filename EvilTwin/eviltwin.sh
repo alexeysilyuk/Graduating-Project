@@ -1,6 +1,8 @@
 #!/bin/bash
 
+wd="$WD/EvilTwin/"
 
-./scanForTwins.sh &
-./eviltwinAutoremover.sh &
+$wd/killeviltwin.sh
+$wd/scanForTwins.sh &
+$wd/eviltwinAutoRemover.sh &
 

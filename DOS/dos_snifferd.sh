@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #import functions and definitions
-source functions.sh
-dos_detetction_runtime=60
 
-mkdir "sniffer_files"
+source $CONF_WD/dos.conf
+source $wd/"functions.sh"
+mkdir  $wd/"sniffer_files" 2> /dev/null
 
 
 while :; do
@@ -31,6 +31,7 @@ while :; do
     
 	#get current ratio from database
 	avg_ratio=$(sqlite3 $database_name "select avg(ratio) from $tablename where id!=$oldestID_rowID")
+   echo WHAT_DA $oldestID_rowID
 
 	#calculate current average from db * dos_attack_margin to get maximal offset from real average
 	#all values over thos 
@@ -42,6 +43,7 @@ while :; do
         convert_ip_lists $syn_file $fin_file
         detect_intruder_ip
         block_ip $last_intruder_ip
+        echo $(date +%s"|"%d.%m.%y"|"%H:%M:%S)"|"$last_intruder_ip >> $historyFile
 	fi;
 
 done;

@@ -1,7 +1,1 @@
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
-UnblockIP.sh: There are no blocked ip's list
+1553348726|23/03/19|13:45:26: UnblockIP.sh: Remove 192.168.1.66 from iptables block
