@@ -1,7 +1,8 @@
 from multiprocessing import Process, Queue
 from firebase import firebase
 import socket 
-
+import time
+from time import gmtime, strftime
 
 
 class blackListAnalyze():
@@ -11,14 +12,10 @@ class blackListAnalyze():
         self.get_black_list_IPs()
 
     def analyze_IP(self,q): 
+        print 'Ready'
         while True:
-            print 'Ready'
             popped = q.get() 
-            if popped == 'Stop':
-                break
-            else:
-                print popped
-                self.check_if_this_web_in_black_list_or_suspected(popped)
+            self.check_if_this_web_in_black_list_or_suspected(popped)
 
     def check_if_this_web_in_black_list_or_suspected(self,popped):
         def check_if_bad(dns):
@@ -27,9 +24,9 @@ class blackListAnalyze():
                 lis = list(map(lambda x:x.lower(),lisData[i]))
                 for j in lis:
                     # print 'j = ' + str(j) + ' popped = ' + str(popped)
-                    if j in popped:
-                        print 'Alert this site suspecte as ' + str( self.blackList.getType(i) ) + 'site'
-
+                    if j in popped.queryName:
+                        print 'Alert! the site: ' + popped.queryName + ' suspecte as ' + str( self.blackList.getType(i) ) + 'site'
+                        popped.reportToCsvFile()
         #TODO: I may need to do this with binary search.
         check_if_bad(popped)
 

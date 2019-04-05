@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source $CONF_WD/"arpsniffer.conf"
-sudo python3 $wd/Sniffer_analyzer.py &
+source $CONF_WD/"arptablewatcher.conf"
+sudo python3 $wd/Watcher.py &
 

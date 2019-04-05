@@ -1,1 +1,4 @@
-1553348726|23/03/19|13:45:26: UnblockIP.sh: Remove 192.168.1.66 from iptables block
+1554476333|05/04/19|14:58:53: block_ip(): New attack from [ 3(NXDOMAIN), 192.168.1.69 ], create new DROP rule in iptables
+1554476563|05/04/19|15:02:43: block_ip(): Dos attack from [ 3(NXDOMAIN), 192.168.1.69 ] 
+1554476954|05/04/19|15:09:14: block_ip(): New attack from [ 3(NXDOMAIN), 192.168.1.66 ], create new DROP rule in iptables
+1554477197|05/04/19|15:13:17: block_ip(): New attack from [ 3(NXDOMAIN), 192.168.1.70 ], create new DROP rule in iptables

@@ -4,8 +4,8 @@ source $CONF_WD/"dos.conf"
 
 # convert tcpump log to 2 lists of ip's, ip's of SYN senders and ip's of FIN receiver
 convert_ip_lists(){
-	cat $syn_file | awk '{print $3}' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' > $syn_ips
-	cat $fin_file | awk '{print $5}' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' > $fin_ips
+	cat $syn_file | awk '{ print $8 }' | awk -F '.' '{print  $1"."$2"."$3"."$4 }'> $syn_ips
+	cat $fin_file | awk '{ print $8 }' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' > $fin_ips
 }
 
 # adding new ratio record to DB
@@ -34,14 +34,17 @@ add_record () {
 detect_intruder_ip(){
 
 intruder_ip=$(cat $syn_ips | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2 }' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' | sort -u)
+
 last_intruder_ip=$intruder_ip
-echo $last_intruder_ip
+intruder_mac=$(cat $syn_file | grep $intruder_ip | awk '{ print $2 }' | sort -u | head -n 1 | awk -F ',' '{ print $1 }' )
+attacked_ip=$(cat $syn_file | grep $intruder_ip | awk '{ print $10 }' | awk -F '.' '{print  $1"."$2"."$3"."$4 }' | sort -u | head -n 1)
+attacked_mac=$(cat $syn_file | grep $intruder_ip | awk '{ print $4 }' | sort -u | head -n 1 | awk -F ',' '{ print $1 }')
 }
 
 
 
 block_ip(){
-    sudo ipset add blacklist $last_intruder_ip
+    sudo ipset add blacklist $last_intruder_ip -exist
     is_blocked=$?
     host_name=$(host $last_intruder_ip | awk '{print $5}' | awk -F '.' '{print $1}')
     #if ip been blocked now, add it to blocked.txt file, if not, means it's already in blocked list

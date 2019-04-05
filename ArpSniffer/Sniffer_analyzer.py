@@ -1,70 +1,65 @@
-import socket
-from general import *
-from networking.ethernet import Ethernet
-from networking.ipv4 import IPv4
-from networking.icmp import ICMP
-from networking.tcp import TCP
-from networking.udp import UDP
-from networking.pcap import Pcap
-from networking.http import HTTP
-from uuid import getnode as get_mac
+from scapy.all import ARP, sniff
 from decimal import *
 import time
+from datetime import datetime
+import pytz
 from multiprocessing import Process, Queue
-from ARP_Analytics.ARP_analytics import *
-from Safe_surfing.Black_list_ip_analyzer import blackListAnalyze
+from ARP_analytics import *
 import sys
+from requestDataHolder import reqDataHolder
 
-TAB_1 = '\t - '
-TAB_2 = '\t\t - '
-TAB_3 = '\t\t\t - '
-TAB_4 = '\t\t\t\t - '
-
-DATA_TAB_1 = '\t   '
-DATA_TAB_2 = '\t\t   '
-DATA_TAB_3 = '\t\t\t   '
-DATA_TAB_4 = '\t\t\t\t   '
-
-mac = get_mac()
-my_mac_address = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))
-
+q = Queue()
+alreadySuspectedMACs = Queue()
+list_of_already_suspected = []
+_ARP_analytics = ARP_analytics()
 def ARP_Sniffer_Analyzer():
-    global listOfSuspectedMAC
-    pcap = Pcap('ARP capture.pcap')
-    conn = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
-
-    _ARP_analytics = ARP_analytics()
-    q = Queue()
+    # global listOfSuspectedMAC
     
-    alreadySuspectedMACs = Queue()
-    list_of_already_suspected = []
+    global q
+    global alreadySuspectedMACs
+    global list_of_already_suspected
 
     p = Process(target=_ARP_analytics.analyze_ARP, args=(q,alreadySuspectedMACs,))
     p.start()
 
-    while True:
-        Biggest_buffer_we_can_afford  = 65535
-        raw_data, addr = conn.recvfrom(Biggest_buffer_we_can_afford)
-        pcap.write(raw_data)
-        eth = Ethernet(raw_data)
-        if eth.src_mac == my_mac_address:
-            continue
-
-        def check_if_We_already_alert_about_this_MAC():
-            if not alreadySuspectedMACs.empty():
-                holder = alreadySuspectedMACs.get()
-                if holder not in list_of_already_suspected:
-                    list_of_already_suspected.append(holder)
-
-        #ARP packet
-        if eth.original_proto == 2054:
-            if eth.src_mac != 'FF:FF:FF:FF:FF:FF':
-                check_if_We_already_alert_about_this_MAC()
-
-                if eth.src_mac not in list_of_already_suspected:
-                    q.put(eth.src_mac)
-                    print(eth.src_mac)
-            continue
-
 ARP_Sniffer_Analyzer()
+                
+def check_if_We_already_alert_about_this_MAC():
+    if not alreadySuspectedMACs.empty():
+        holder = alreadySuspectedMACs.get()
+        print("holder")
+        print(holder)
+        if holder not in list_of_already_suspected:
+            list_of_already_suspected.append(holder)
 
+def getDataHolder(pkt):
+        dataHolder = reqDataHolder()
+        dataHolder.ip_src = pkt[ARP].psrc
+        dataHolder.MAC = pkt[ARP].hwsrc
+        dataHolder.setTimeAndDate()
+        
+        print(dataHolder)
+        return dataHolder
+def check_if_need_to_empty_list():
+    global _ARP_analytics
+    needToDelete = _ARP_analytics.checkIfNeedToEmptySuspectedList()
+    if needToDelete:
+        del list_of_already_suspected[:]
+
+def arp_display(pkt):
+    global list_of_already_suspected
+    if pkt[ARP].op == 1:  # who-has (request)
+        #print( "Request: " + str(pkt[ARP].psrc) + " is asking about " + str(pkt[ARP].pdst)) 
+        # ARP spoofing is just when the device flood with response and not 
+        # with a requests
+        pass
+        
+    if pkt[ARP].op == 2:  # is-at (response)
+        check_if_We_already_alert_about_this_MAC()
+        print( "Response: " + str(pkt[ARP].hwsrc) + " has address " + str(pkt[ARP].psrc))
+        check_if_need_to_empty_list()
+        if pkt[ARP].hwsrc not in list_of_already_suspected:
+            dataHolder = getDataHolder(pkt)
+            q.put(dataHolder)
+ 
+sniff(prn=arp_display, filter="arp")

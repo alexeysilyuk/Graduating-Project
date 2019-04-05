@@ -9,7 +9,7 @@ def main():
     # get all connected IPs in local
     # And start it in a new thread 
     _thread.start_new_thread(ping_all, ())
-    log('Pinging everyones',True)    
+
 
     ArpUtil = ReadArpUtility()
     initial_pair_of_ip_and_mac = ArpUtil.get_pairs_of_mac_and_ip()

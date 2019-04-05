@@ -9,8 +9,8 @@ mkdir  $wd/"sniffer_files" 2> /dev/null
 
 while :; do
 	# listen to packets and collect data
-	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-syn) != 0" > $syn_file & # count SYN packets
-	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface  "tcp[tcpflags] & (tcp-fin) != 0" > $fin_file & # count FIN packets
+	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface -e "tcp[tcpflags] & (tcp-syn) != 0" > $syn_file & # count SYN packets
+	sudo timeout $dos_detetction_runtime tcpdump -nnq -i $interface -e "tcp[tcpflags] & (tcp-fin) != 0" > $fin_file & # count FIN packets
 	sleep $dos_detetction_runtime
 
 	#count lines for producing ratio of SYN/FIN packets
@@ -43,7 +43,13 @@ while :; do
         convert_ip_lists $syn_file $fin_file
         detect_intruder_ip
         block_ip $last_intruder_ip
-        echo $(date +%s"|"%d.%m.%y"|"%H:%M:%S)"|"$last_intruder_ip >> $historyFile
+        attacker_hostname=$(host $last_intruder_ip | awk '{ print $5 }')
+        if [ $attacker_hostname == "3(NXDOMAIN)" ]; then 
+          attacker_hostname="Fake Hostname" 
+        fi
+        attacked_hostname=$(host $attacked_ip | awk '{ print $5 }')
+        msg=$(date +%s"|"%d.%m.%y"|"%H:%M:%S)"|"$attacker_hostname"|"$last_intruder_ip"|"$intruder_mac"|"$attacked_hostname"|"$attacked_ip"|"$attacked_mac
+        echo  $msg >> $historyFile
 	fi;
 
 done;

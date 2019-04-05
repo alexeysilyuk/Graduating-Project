@@ -19,7 +19,7 @@ while :; do
           is_exists=$(cat $log_file 2> /dev/null | awk  '{print $3}' | grep $mac | wc -l)
           if [ $is_exists = "0" ];then 
             echo $(date +%s"|"%d.%m.%y"|"%H:%M:%S)"|"$mac >> $log_file
-		sendEmail $mac
+		#sendEmail $mac
             fi
           fi
       done

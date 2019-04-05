@@ -1,5 +1,3 @@
-
-
 class arp:
     def __init__(self,allDeviceField):
         '''

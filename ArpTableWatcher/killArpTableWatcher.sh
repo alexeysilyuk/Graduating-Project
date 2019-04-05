@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pid=$(pgrep -f Sniffer_analyzer.py)
+pid=$(pgrep -f Watcher.py)
 
 for i in $pid; do
   sudo kill $i
