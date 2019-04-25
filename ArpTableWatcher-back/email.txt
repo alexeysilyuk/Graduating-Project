@@ -1,0 +1,3 @@
+Subject: ARP Spoofing attack detected
+ 
+[e8:de:27:a4:eb:08, 192.168.1.55, 192.168.1.64, Alexey-silyuk, kali, 15/04/19, 20:18, 1555348715.3926065]

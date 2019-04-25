@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 
 class reqDataHolder():
-    def __init__(self):
+    def __init__(self,path):
         self.hour = None
         self.date = None
         # self.day_in_week = None
@@ -22,14 +22,15 @@ class reqDataHolder():
         self.udp_dst_port = None
         self.queryName = None
         self.computerName = None
+        self.path = path
 
         #check if dir exist if not create it
         def check_dir():
             try:
-                with open('history.csv', 'rb') as csvfile:
+                with open(self.path + 'history.csv', 'rb') as csvfile:
                     pass
             except:
-                with open('history.csv', 'wb') as csvfile:
+                with open(self.path + 'history.csv', 'wb') as csvfile:
                     pass
         check_dir()
 
@@ -40,14 +41,15 @@ class reqDataHolder():
 
     def setTimeAndDate(self):
         self.date = time.strftime("%d/%m/%y")
-        now =  datetime.now(tz=pytz.timezone('Israel'))
+        now =  datetime.now()#(tz=pytz.timezone('Israel'))
         self.time = str(now.hour) +':'+ str(now.minute)
 
     def getData(self):
         return [self.ip_src,self.MAC,self.date,self.time]
 
     def reportToCsvFile(self):
+        print 'A-L-E-R-T-!!!'
         line = [self.ip_src,self.MAC,self.date,self.time]
-        with open('history.csv', 'a') as f:
+        with open(self.path + 'history.csv', 'a') as f:
             writer = csv.writer(f)
             writer.writerow(line)

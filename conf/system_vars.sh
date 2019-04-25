@@ -7,4 +7,3 @@ export CONFIG_PATH="/home/pi/conf"
 export DOS_PATH="/home/pi/DOS"
 export CONF_WD="/home/pi/safewifi/conf"
 export WD="/home/pi/safewifi"
-export ADMIN_EMAIL=alex.silyuk@gmail.com

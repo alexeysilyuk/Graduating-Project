@@ -3,7 +3,12 @@
 
 To run this write:
 ```bash
-sudo python2 ./Sniffer_analyzer.py
+sudo python2 ./Sniffer_analyzer.py /home/pi/
+```
+
+Please Install:
+```Bash
+sudo pip2 install pytz
 ```
 
 sniffer.py - Is just a sniffer that prints all the data he sees.
@@ -25,4 +30,5 @@ FireBase_mng.py -
 #TODO: 
 <br>
 Allow some devices
-
+<br>
+Support multi threading 

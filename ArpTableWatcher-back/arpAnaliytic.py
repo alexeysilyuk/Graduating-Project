@@ -14,11 +14,10 @@ class arpAnaliytics():
     def __init__(self,path):
         self.path_to_analiytic_json = os.path.dirname(os.path.abspath(__file__)) + '/ARPanaliytic.json'
         # self.path_to_blacklist_MAC_addresses = os.path.dirname(os.path.abspath(__file__)) + '/Blacklist_MAC_addresses.csv'
-        self.path = path[0]
+        self.path = path[0]	
         self.check_if_cash_file_is_exist_if_not_created()
         self.check_if_history_file_not_created()
         self.suspected_MACs = []
-        
         
     def Alert_for_suspected_MAC_address(self,s_MAC,s_IP,victimIP):
         WeAlreadyAlertAboutThatInLastMinute = False

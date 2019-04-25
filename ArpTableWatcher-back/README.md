@@ -8,10 +8,6 @@ To clear arp table cash
 sudo ip neigh flush all
 ```
 
-
-To run:
-sudo python3 ./Watcher.py /home/pi/ARP-table-watcher
-
 To give permissions to all subdirectories
 ```Bash
 sudo chmod -R 777 .
